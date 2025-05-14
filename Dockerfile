@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-RUN apk add -no-cache bash
+RUN apk add bash
 
 RUN npm install -g @nestjs/cli
 

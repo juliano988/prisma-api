@@ -22,7 +22,7 @@ services:
       - .docker/db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=docker
-      - POSTRES_DB=prisma-api
+      - POSTGRES_DB=prisma-api
 
 
 

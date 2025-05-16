@@ -1,6 +1,11 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ConflictInterceptor } from './common/errors/interceptors/conflict.interceptor';
+import { DatabaseInterceptor } from './common/errors/interceptors/databaseError.interceptor';
+import { NotFoundInterceptor } from './common/errors/interceptors/notFound.interceptor';
+import { UnauthorizedInterceptor } from './common/errors/interceptors/unauthorized.interceptor';
+import { HttpExceptionFilter } from './common/filter/http-exception/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +15,14 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       transform: true,
     }),
+  );
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(
+    new ConflictInterceptor(),
+    new DatabaseInterceptor(),
+    new UnauthorizedInterceptor(),
+    new NotFoundInterceptor(),
+    new DatabaseInterceptor(),
   );
   await app.listen(process.env.PORT ?? 3000);
 }

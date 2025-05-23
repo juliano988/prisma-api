@@ -6,9 +6,19 @@ import { DatabaseInterceptor } from './common/errors/interceptors/databaseError.
 import { NotFoundInterceptor } from './common/errors/interceptors/notFound.interceptor';
 import { UnauthorizedInterceptor } from './common/errors/interceptors/unauthorized.interceptor';
 import { HttpExceptionFilter } from './common/filter/http-exception/http-exception.filter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const config = new DocumentBuilder()
+    .setTitle('Simple Blog')
+    .setDescription('The simple blog API description')
+    .setVersion('1.0')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
